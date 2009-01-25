@@ -1,0 +1,114 @@
+/*
+    Copyright (C) 2009  Martin Koistinen
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+html, body {
+	font-family: tahoma, sans-serif;
+	line-height: 133%;
+}
+
+body { margin: 12pt; }
+
+div, p, table {
+	margin-top: 6pt;
+	margin-bottom: 6pt;
+}
+
+table {
+	border-style: dashed;
+	border-width: 2px;
+	padding: 4pt;
+	border-spacing: 0pt;
+	border-color: #999999;
+	margin-bottom: 6pt;
+}
+
+h1 { font-size: 14pt; font-style: italic; }
+h2 { font-size: 12pt; }
+
+p.inst {
+	font-family: Georgia, serif;
+	font-size: 9.5pt;
+	text-align: justify;
+}
+
+p.rslt, li.rslt {
+	font-family: Georgia, serif;
+	font-size: 9.5pt;
+	text-align: justify;
+}
+
+p.footnote {
+	font-size: 7pt;
+	font-family: Georgia, serif;
+	line-height: 120%;
+	text-align: left;
+}
+
+p.intro { font-family: Georgia, serif; font-size: 12pt;	line-height: 16pt; text-align: justify; }
+
+sub { vertical-align: 0; position: relative; top: 0.8ex; font-size: 75%; padding-bottom: 0px;}
+
+sup { vertical-align: 0; position: relative; top: -1ex; font-size: 75%; padding-bottom: 0px; }
+
+sup:before { content: "("; }
+sup:after { content: ")"; }
+
+div.step { page-break-inside: avoid; }
+
+.fl { font-size: 8pt; font-weight: bold;}
+
+th {
+	font-size: 8pt; 
+	padding-right: 2pt;
+	line-height: 120%
+}
+
+.adv { }
+
+tr, td { text-align: right; }
+
+input {
+	font-size: 9pt;
+	width: 5em;
+	border-style: inset;
+	border-width: 1pt;
+	margin: 0;
+	text-align: right;
+}
+
+input.entry {
+	background-color: #e5e58a;
+}
+
+input.noEntry {
+	font-size: 9pt;
+	background: none;
+	border-style: solid;
+	border-color: #e0e0e0;
+	border-width: 1px;
+	color: #666666;
+}
+	
+div.summary {
+	font-family: Georgia, serif; 
+	font-size: 12pt;
+	text-align: justify; 
+	border-style: solid;
+	border-width: 2px;
+	border-color: black;
+	padding: 6px;
+}
