@@ -1,0 +1,273 @@
+<!--
+    Copyright (C) 2009  Martin Koistinen
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>Bulb Replacement Worksheet</title>
+	<link rel=stylesheet href="brw.css" type="text/css">
+	<script src="brw.js" type="text/javascript"></script>
+</head>
+
+<body onload="initialisePage();">
+
+<div>
+	<h1>Bulb Replacement Worksheet</h1>
+	<p class="intro">This worksheet can be used to illustrate the energy, cost and emissions-savings that can be achieved simply by replacing your conventional (incandescent or halogen) light bulbs with energy-efficient LEDs (Light-Emitting Diodes) or CFLs (Compact Fluorescent Lights).  The worksheet is divided into 3, simple steps and could easily be printed to save your results (however, we encourage you to minimise paper-waste too!).</p>
+</div>
+
+<hr />
+
+<div class="step">
+	<h2>Step 1: Your Energy Cost</h2>
+		<p class="inst">We must determine how much you pay for your electricity so that we can compute your savings in real terms.  In the yellow boxes below, please enter the details of the tariff that you pay for electricity.  You should be able to quickly obtain these figures from your latest electricity bill.</p><p class="inst">A typical amount is here by default, but this could be very different from the tariff you pay.  If your tariff does not use a standing charge, please enter zero (0) in the first box.  If your tariff does not have an initial rate, enter zero (0) in the 3rd box labelled "...for the first:".</p>
+		
+		<table cellspacing="0">
+			<tr>
+				<td class="fl">Standing charge: &pound;<input id="ecStandingCharge" class="entry" type="text" value="0.00" onblur="this.value=new Number(this.value).range(0,1000).toFixed(2); recompute(1);"/></td>
+				<td class="fl" style="text-align: left">
+				<select id="ecStandingChargePeriod" onchange="recompute(1);">
+					<option value="365.25">per day</option>
+					<option value="12">per month</option>
+					<option selected="selected" value="4">per quarter</option>
+					<option value="1">per year</option>
+				</select>
+				</td>
+			</tr>
+		
+			<tr>
+				<td class="fl">Initial peak (day) rate: <input id="ecInitialPeakRate" class="entry" type="text" value="20.150" onkeyup="startTimer(1);" onblur="this.value=new Number(this.value).range(0,100).toFixed(3); recompute(1);"/></td>
+				<td class="fl" style="text-align: left"> p/kWh</td>
+			</tr>
+	
+			<tr>
+				<td class="fl">...for the first: <input id="ecInitialAmt" class="entry" type="text" value="900.0" onkeyup="startTimer(1);" onblur="this.value=new Number(this.value).range(0,5000).toFixed(1); recompute(1);"/></td>
+				<td class="fl" style="text-align: left"> kWh</td>
+			</tr>
+	
+			<tr>
+				<td class="fl">Peak (day) rate: <input id="ecPeakRate" class="entry" type="text" value="13.934" onkeyup="startTimer(1);"  onblur="this.value=new Number(this.value).range(0,100).toFixed(3); recompute(1);"/></td>
+				<td class="fl" style="text-align: left"> p/kWh</td>
+			</tr>
+	
+			<tr>
+				<td class="fl">Off-peak (night) rate: <input id="ecOffPeakRate" class="entry" type="text" value="6.111" onkeyup="startTimer(1);" onblur="this.value=new Number(this.value).range(0,100).toFixed(3); recompute(1);"/></td>
+				<td class="fl" style="text-align: left"> p/kWh</td>
+			</tr>
+	
+			<tr>
+				<td class="fl">Total quarterly usage: <input id="ecTotalQtrUsage" class="entry" type="text" value="1350.0" onkeyup="startTimer(1);" onblur="this.value=new Number(this.value).range(0,10000).toFixed(1); recompute(1);"/></td>
+				<td class="fl" style="text-align: left"> kWh</td>
+			</tr>
+	
+			<tr>
+				<td class="fl">Percentage of off-peak hours: <input id="ecPctOffPeak" class="entry" type="text" value="55.0" onkeyup="startTimer(1);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(1);"/></td>
+				<td class="fl" style="text-align: left"> %</td>
+			</tr>
+	
+			<tr>
+				<td class="fl">Prices above <select id="ecVatInclusive" onchange="recompute(1);"><option value="1" selected="selected">are</option><option value="0">are not</option></select></td>
+				<td class="fl" style="text-align: left"> inclusive of 5% VAT</td>
+			</tr>
+	
+		</table>
+		
+		<p class="rslt">Based on your input, we can calculate that you annual estimated electricity cost is &pound;<span id="annualCostText">0.00</span><sup>1</sup> and that your average cost for electricity is <span id="averageCostText">00.000</span> p/kWh<sup>1</sup>.  Your total household energy usage is estimated to produce <span id="totalCO2Output">0.000</span> kg of CO<sub>2</sub> emissions<sup>2</sup> each year, but by replacing your conventional lights with energy-efficient ones, you can help bring this down significantly.</p>
+		
+	<hr/>
+</div>
+<div class="step">
+	<h2>Step 2: Your Current Incandescent Bulb Usage</h2>
+		<p class="inst">Next, we need to understand how much lighting you use in your home.  This worksheet requires that only one wattage of bulb is considered at a time.  You may, of course, use this worksheet as many times as you like if you have bulbs of varying wattage.  Enter the wattage of the conventional light bulbs you are replacing now in the yellow box below.</p>
+	
+		<table cellspacing="0">
+			<tr>
+				<th>Wattage of conventional bulbs:</th>
+				<td><input class="entry" id="masterWattage" type="text" value="50.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/><span class="fl">W</span></td>
+			</tr>
+		</table>
+		
+		<p class="inst">In the yellow boxes below, please enter the number of these conventional bulbs you have in each room of your flat and the estimated number of hours, on average that you use these lights.  Some default values are pre-populated assuming a typical 2-bathroom flat.  This may vary widely from your own bulb counts and usage patterns.</p>
+		
+		<table cellspacing="0">
+			<tr>
+				<th></th>
+				<th style="text-align: center;"># Bulbs</th>
+				<th style="text-align: center;">Hrs/Day</th>
+			</tr>
+			<tr>
+				<th>Living Room</th>
+				<td><input class="entry" id="buLivingNum" type="text" value="6" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buLivingAmt" type="text" value="4.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Dining Room</th>
+				<td><input class="entry" id="buDiningNum" type="text" value="6" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buDiningAmt" type="text" value="2.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Kitchen</th>
+				<td><input class="entry" id="buKitchenNum" type="text" value="7" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buKitchenAmt" type="text" value="4.5" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Bedroom 1</th>
+				<td><input class="entry" id="buBed1Num" type="text" value="2" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buBed1Amt" type="text" value="3.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Bedroom 2</th>
+				<td><input class="entry" id="buBed2Num" type="text" value="2" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buBed2Amt" type="text" value="3.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Bedroom 3</th>
+				<td><input class="entry" id="buBed3Num" type="text" value="0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buBed3Amt" type="text" value="0.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Bathroom 1</th>
+				<td><input class="entry" id="buBath1Num" type="text" value="4" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buBath1Amt" type="text" value="2.5" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Bathroom 2</th>
+				<td><input class="entry" id="buBath2Num" type="text" value="4" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buBath2Amt" type="text" value="2.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr>
+				<th>Other</th>
+				<td><input class="entry" id="buOtherNum" type="text" value="0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(0); recompute(2);"/></td>
+				<td><input class="entry" id="buOtherAmt" type="text" value="0.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/></td>
+			</tr>
+			<tr class="adv">
+				<th></th>
+				<td colspan="2" style="height: 1px; background: #000000;"></td>
+			</tr>
+			<tr class="adv">
+				<th>Totals</th>
+				<td><input class="noEntry" disabled="disabled" id="buSumBulbs" type="text" value="0"/></td>
+				<td><input class="noEntry" disabled="disabled" id="buSumHours" type="text" value="0.0"/></td>
+			</tr>
+		</table>
+		
+		<p class="rslt">In the yellow box below, please enter the estimated percentage of usage of the above lighting during peak hours.  Note that the Off-Peak hours are generally from approximately 00:30 to 07:30 GMT, but these hours may be adjusted by your supplier.</p>
+		
+		<table cellspacing="0">
+			<tr>
+				<th>Percentage usage during peak hours:</th>
+				<td><input class="entry" id="percentPeakUsage" type="text" value="95.0" onkeyup="startTimer(2);" onblur="this.value=new Number(this.value).range(0,100).toFixed(1); recompute(2);"/><span class="fl">%</span></td>
+			</tr>
+		</table>
+	
+		<p class="rslt">Based on this additional information, we know that your total number of incandescent bulbs in use is <span id="buTotalBulbs">0</span>.  These bulbs are used for an average of <span id="buAverageHours">0.0</span> hours per day each.  The effective energy tariff for this lighting is <span id="blendedRate">0.0</span> p/kWh.  The estimated amount of energy used for this lighting is <span id="buEstEnergyPerMonth">0</span> kWh per month.  This represents approximately <span id="buEnergyFraction">0.0</span>% of your total energy use.  Your estimated energy cost for this lighting is &pound;<span id="buEstEnergyCost">0</span> per month.  The estimated amount of CO<sub>2</sub> emissions produced for this lighting is <span id="buEstEmissions">0</span> kg<sup>2</sup> <i>every month</i>.  Yikes!</p>
+	<hr/>
+</div>
+<div class="step">
+	<h2>Step 3: Bulb Costs &amp; Results</h2>
+		<p class="inst">Now, let's get to the savings.  In the yellow boxes, please enter the cost of each bulb type, their rated lifespan and the wattage.  We've already filled in the wattage of your conventional lighting, since you provided it above.  Some default values appear here and should be reasonable to use, but you might wish to change these to suit your circumstances.</p>
+		
+		<table cellspacing="0">
+			<tr>
+				<th></th>
+				<th style="text-align: center;">Cost (&pound;)<br />per bulb</th>
+				<th style="text-align: center;">Life<br />(Hrs)</th>
+				<th style="text-align: center;">Wattage<br />(W)</th>
+				
+				<th class="adv" style="text-align: center;">Cost (&pound;)<br />per mo.</th>
+				<th class="adv" style="text-align: center;">Total 1st<br />Year Cost</th>
+				<th class="adv" style="text-align: center;">Lifetime<br />Cost (&pound;)<sup>3</sup></th>
+				<th class="adv" style="text-align: center;">CO<sub>2</sub> Ems.<br />(kg/yr)<sup>2</sup></th>
+			</tr>
+			<tr>
+				<th>Incandescent Bulbs</th>
+				<td><input class="entry" id="halCost" type="text" value="1.99" onkeyup="startTimer(3);" onblur="this.value=new Number(this.value).range(0,1000).toFixed(2); recompute(3);"/></td>
+				<td><input class="entry" id="halLifespan" type="text" value="2000" onkeyup="startTimer(3);" onblur="this.value=new Number(this.value).range(500,1000000).toFixed(0); recompute(3);"/></td>
+				
+				<td><input class="noEntry" id="halWattage" disabled="disabled" type="text" value="0"/></td>
+				
+				<td class="adv"><input class="noEntry" disabled="disabled" id="halCostPerMonth" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="halFirstYearCost" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="halCostOverCFLLifetime" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="halCO2perYear" type="text" value="0.00"/></td>
+			</tr>
+			<tr>
+				<th>LED/CFL Bulbs</th>
+				<td><input class="entry" id="cflCost" type="text" value="5.99" onkeyup="startTimer(3);" onblur="this.value=new Number(this.value).range(0,1000).toFixed(2); recompute(3);"/></td>
+				<td><input class="entry" id="cflLifespan" type="text" value="15000" onkeyup="startTimer(3);" onblur="this.value=new Number(this.value).range(500,1000000).toFixed(0); recompute(3);"/></td>
+				<td><input class="entry" id="cflWattage" type="text" value="11.0" onkeyup="startTimer(3);" onblur="this.value=new Number(this.value).range(0,5000).toFixed(1); recompute(3);"/></td>
+				
+				<td class="adv"><input class="noEntry" disabled="disabled" id="cflCostPerMonth" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="cflFirstYearCost" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="cflCostOverCFLLifetime" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="cflCO2perYear" type="text" value="0.00"/></td>
+			</tr>
+			<tr class="adv">
+				<td></td>
+				<td colspan="7" style="height: 1px; background: #000000;"></td>
+			</tr>
+			<tr class="adv">
+				<th>Savings per bulb</th>
+				<td><input class="noEntry" disabled="disabled" id="savCost" type="text" value="0.00"/></td>
+				<td></td>
+				<td></td>
+				<td><input class="noEntry" disabled="disabled" id="savCostPerMonth" type="text" value="0.00"/></td>
+				<td><input class="noEntry" disabled="disabled" id="savFirstYearCost" type="text" value="0.00"/></td>
+				<td><input class="noEntry" disabled="disabled" id="savCostOverCFLLifetime" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="savCO2perYear" type="text" value="0.00"/></td>
+			</tr>
+			<tr class="adv">
+				<th>Savings, all bulbs</th>
+				<td><input class="noEntry" disabled="disabled" id="totCost" type="text" value="0.00"/></td>
+				<td></td>
+				<td></td>
+				<td><input class="noEntry" disabled="disabled" id="totCostPerMonth" type="text" value="0.00"/></td>
+				<td><input class="noEntry" disabled="disabled" id="totFirstYearCost" type="text" value="0.00"/></td>
+				<td><input class="noEntry" disabled="disabled" id="totCostOverCFLLifetime" type="text" value="0.00"/></td>
+				<td class="adv"><input class="noEntry" disabled="disabled" id="totCO2perYear" type="text" value="0.00"/></td>
+			</tr>
+		</table>
+		
+		<p class="inst">Check the box below if you plan to replace your bulbs regardless if they still work or not.  If you plan to replace them only once they burn out, leave the box unchecked.  If left unchecked, your total investment (cost of the replacement bulbs) will be reduced by the amount you would have to spend anyway to replace your bulbs with conventional replacements.</p>
+		
+		<table cellspacing="0">
+			<tr><th style="text-align: left"><input type="checkbox" id="replaceRegardless" value="1" onchange="recompute(3);"> Replace conventional bulbs immediately.</th></tr>
+		</table>
+		
+		<p class="rslt" style="margin-bottom: 3pt">According to your specified usage pattern, energy costs and replacement bulb details, your bulb replacement project should:</p>
+		<ul style="margin-top: 0">
+			<li class="rslt">pay for itself in only <span id="breakEvenStr" style="font-weight: bold;">0</span>;</li>
+			<li class="rslt">trim your energy bill by <span id="energyReduction">0.0</span>% (&pound;<span id="txtCostPerMonth">0.00</span> per month or &pound;<span id="txtCostPerYear">0.00</span> per year) and</li>
+			<li class="rslt">reduce your home's total CO<sub>2</sub> emissions by an estimated <span id="pctCarbonReduction">0.0</span>% (<span id="carbonReduction">0.00</span> kg<sup>2</sup> each year).</li>
+		</ul>
+
+		<div class="summary">
+			<b>Conclusion</b>: How could this get any better?  You essentially invest &pound;<span id="invest">0.00</span> today and get an return on your investment of &pound;<span id="annualROI">0.00</span> <i>per year</i> for the next <span id="cflLifespanYears">0.0</span> years for a grand total of &pound;<span id="totalROI">0.00</span>.  This is like having a savings account that pays you a tax-free AER of <span id="aer">0.0</span>%!  And, on top of all this, you'll be helping to save the planet.  Replace your conventional bulbs with more energy-efficient technology today!
+		</div>
+
+		<p class="rslt">To save these results, print this page.  If your computer supports printing to a PDF document, use this feature to save paper and energy.</p>
+
+		<p class="footnote"><sup>1</sup> All estimated energy prices shown <i>include</i> 5% VAT.</p>
+
+		<p class="footnote"><sup>2</sup> All CO<sub>2</sub> emissions based on <a href="http://www.defra.gov.uk/environment/climatechange/uk/individual/actonco2/index.htm" target="_new">August 2008 Defra figures</a> of <span id="kgCO2PerKWH">0</span>g of CO<sub>2</sub> emissions per kWh of grid electricity produced.  Actual emissions will vary by electricity supplier.</p>
+
+		<p class="footnote"><sup>3</sup> Lifetime Costs is the total cost of each bulb <i>over the lifespan of the longest life bulb</i> and includes the energy cost and the cost of the actual bulb(s) and since conventional bulbs burn out so quickly, you have to use many of them over the lifetime of its replacement energy-efficient bulb.</p>
+	</div>
+</body>
+</html>
